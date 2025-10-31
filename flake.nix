@@ -2,7 +2,7 @@
   description = "Nix flake to build tropic01 examples";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/63dacb46bf939521bdc93981b4cbb7ecb58427a0";
+    nixpkgs.url = "github:NixOS/nixpkgs/20c4598c84a671783f741e02bf05cbfaf4907cff";
     flake-utils.url = "github:numtide/flake-utils/11707dc2f618dd54ca8739b309ec4fc024de578b";
   };
 
@@ -29,9 +29,12 @@
 
       in {
       devShell = with pkgs; mkShell {
+        nativeBuildInputs = [ cmake ];
         buildInputs = [
           gcc
-          cmake
+          python313
+          python313Packages.argcomplete
+          python313Packages.cryptography
         ];
         shellHook = ''
           echo "Development environment for libtropic-linux is ready."
@@ -40,11 +43,14 @@
 
       packages.libtropic-linux = with pkgs; stdenv.mkDerivation {
         name = "libtropic-linux";
-        src = ./.;
+        src = src;
 
+        nativeBuildInputs = [ cmake ];
         buildInputs = [
           gcc
-          cmake
+          python313
+          python313Packages.argcomplete
+          python313Packages.cryptography
         ];
 
         buildPhase = ''
